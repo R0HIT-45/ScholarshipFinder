@@ -14,13 +14,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres', // <--- CHECK THIS
-      password: 'postgres', // <--- CHANGE THIS TO YOUR POSTGRES PASSWORD
-      database: 'scholarship',
+      url: process.env.DATABASE_URL,
       entities: [Scholarship, Application, User, ActivityLog],
-      synchronize: true,
+      synchronize: true, // Set to false in production!
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
     }),
     ScholarshipModule,
     AuthModule,
